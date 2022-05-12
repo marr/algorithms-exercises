@@ -1,5 +1,6 @@
-/* 
+import { expect, test } from 'vitest';
 
+/* 
   write a function that accepts an array that only contains
   two types of things: numbers and arrays. those nested arrays
   also only contain numbers and other, nested arrays.
@@ -10,10 +11,17 @@
  */
 
 function nestedAdd(array) {
-  // write code here
+  let total = 0;
+  if (!Array.isArray(array)) {
+    return total + array;
+  }
+  for (let i = 0; i < array.length; i++) {
+    total += nestedAdd(array[i]);
+  } 
+  return total;
 }
 
-test.skip("nested arrays addition", () => {
+test("nested arrays addition", () => {
   expect(nestedAdd([1, 2, 3])).toEqual(6);
   expect(nestedAdd([1, [2], 3])).toEqual(6);
   expect(nestedAdd([[[[[[[[[5]]]]]]]]])).toEqual(5);

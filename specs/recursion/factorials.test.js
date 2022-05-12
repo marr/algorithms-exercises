@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 /*
   Make a function that computes a factorial recursively.
   A factorial is when you take a number n and multiply by each preceding integer until you hit one.
@@ -10,11 +11,16 @@
   factorial(3) = 6 
 */
 
-function factorial(n) {}
+function factorial(n) {
+  if (n < 2) {
+    return 1;
+  }
+  return n * factorial(n - 1);
+}
 
 // unit tests
 // do not modify the below code
-test.skip("factorials", () => {
+test("factorials", () => {
   expect(factorial(1)).toEqual(1);
   expect(factorial(2)).toEqual(2);
   expect(factorial(3)).toEqual(6);
