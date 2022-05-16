@@ -1,18 +1,32 @@
-const preorderTraverse = (node, array) => {
-  // code goes here
+import { it, test, expect, describe } from 'vitest';
+
+const preorderTraverse = (node, array = []) => {
+  if (!node) return array;
+  array.push(node.value);
+  preorderTraverse(node.left, array);
+  preorderTraverse(node.right, array);
+  return array;
+}
+
+const inorderTraverse = (node, array = []) => {
+  if (!node) return array;
+  inorderTraverse(node.left, array);
+  array.push(node.value);
+  inorderTraverse(node.right, array);
+  return array;
 };
 
-const inorderTraverse = (node, array) => {
-  // code goes here
-};
-
-const postorderTraverse = (node, array) => {
-  // code goes here
+const postorderTraverse = (node, array = []) => {
+  if (!node) return array;
+  postorderTraverse(node.left, array);
+  postorderTraverse(node.right, array);
+  array.push(node.value);
+  return array;
 };
 
 // unit tests
 // do not modify the below code
-test.skip("depth-first traversals", function () {
+describe("depth-first traversals", function () {
   const tree = {
     value: 8,
     left: {
@@ -58,7 +72,7 @@ test.skip("depth-first traversals", function () {
   };
 
   it("preorderTraverse", () => {
-    expect(preorderTraverse(tree, [])).toEqual([
+    expect(preorderTraverse(tree)).toEqual([
       8,
       4,
       3,
@@ -74,7 +88,7 @@ test.skip("depth-first traversals", function () {
   });
 
   it("inorderTraverse", () => {
-    expect(inorderTraverse(tree, [])).toEqual([
+    expect(inorderTraverse(tree)).toEqual([
       2,
       3,
       4,
@@ -90,7 +104,7 @@ test.skip("depth-first traversals", function () {
   });
 
   it("postorderTraverse", () => {
-    expect(postorderTraverse(tree, [])).toEqual([
+    expect(postorderTraverse(tree)).toEqual([
       2,
       3,
       6,

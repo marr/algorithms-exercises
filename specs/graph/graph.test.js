@@ -1,3 +1,4 @@
+import { describe, test, expect } from "vitest";
 // you work for a professional social network. in this social network, a professional
 // can follow other people to see their updates (think Twitter for professionals.)
 // write a function that finds the job `title` that shows up most frequently given
@@ -26,13 +27,44 @@
 const { getUser } = require("./jobs");
 
 const findMostCommonTitle = (myId, degreesOfSeparation) => {
-  // code goes here
+  
+  let queue = [myId];
+  const seenIds = new Set(queue);
+  const titles = new Map();
+  
+  for (let i = 0; i <= degreesOfSeparation; i++) {
+    const newQueue = [];
+    while (queue.length) {
+      const id = queue.shift();
+      const user = getUser(id);
+
+      for (let j = 0; j < user.connections.length; j++) {
+        const connection = user.connections[j];
+        if (!seenIds.has(connection)) {
+          newQueue.push(connection);
+          seenIds.add(connection);
+        }
+      }
+
+      if (!titles.has(user.title)) {
+        titles.set(user.title, 1);
+      } else {
+        titles.set(user.title, titles.get(user.title) + 1)
+      }
+    }
+    queue = newQueue;
+  }
+  return Array.from(titles.entries()).reduce((acc, entry) => {
+    if (entry[1] > acc[1]) {
+      return entry;
+    }
+    return acc;
+  }, ['', 0])[0];
 };
 
 // unit tests
 // do not modify the below code
-test.skip("findMostCommonTitle", function () {
-  // the getUser function and data comes from this CodePen: https://codepen.io/btholt/pen/NXJGwa?editors=0010
+describe("findMostCommonTitle", function () {
   test("user 30 with 2 degrees of separation", () => {
     expect(findMostCommonTitle(30, 2)).toBe("Librarian");
   });
@@ -48,7 +80,7 @@ test.skip("findMostCommonTitle", function () {
   });
 });
 
-test.skip("extra credit", function () {
+describe("extra credit", function () {
   test("user 1 with 7 degrees of separation – this will traverse every user that's followed by someone else. five users are unfollowed", () => {
     expect(findMostCommonTitle(1, 7)).toBe("Geological Engineer");
   });
